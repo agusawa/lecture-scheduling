@@ -61,8 +61,15 @@ func (app *applicationImpl) showMenu() {
 	fmt.Scan(&input)
 
 	switch input {
-	// case "1":
-	//
+	case "1":
+		app.clearScreen()
+
+		app.ScheduleService.ShowAllSchedulesWithId()
+		fmt.Print("\nPress enter to back to menu [ENTER]")
+		fmt.Scanln(&input)
+
+		app.clearScreen()
+		app.showMenu()
 	case "2":
 		if err := app.ScheduleService.Add(); err != nil {
 			app.clearScreen()

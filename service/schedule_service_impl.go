@@ -55,6 +55,33 @@ func (service *scheduleServiceImpl) Add() error {
 	return nil
 }
 
+func (service *scheduleServiceImpl) ShowAllSchedulesWithId() {
+	schedules := service.ScheduleRepository.FindAll()
+
+	if len(schedules) == 0 {
+		fmt.Println("No schedule found.")
+		return
+	}
+
+	lastDay := ""
+
+	for index, schedule := range schedules {
+		dayName := schedule.GetDayName()
+
+		if lastDay != dayName {
+			lastDay = dayName
+		}
+
+		if index == 0 {
+			fmt.Printf("%s\n", lastDay)
+		} else {
+			fmt.Printf("\n%s\n", lastDay)
+		}
+
+		service.print(schedule, true)
+	}
+}
+
 func (service *scheduleServiceImpl) ShowAllSchedules() {
 	schedules := service.ScheduleRepository.FindAll()
 
@@ -78,7 +105,7 @@ func (service *scheduleServiceImpl) ShowAllSchedules() {
 			fmt.Printf("\n%s\n", lastDay)
 		}
 
-		service.print(schedule)
+		service.print(schedule, false)
 	}
 }
 
@@ -94,13 +121,18 @@ func (service *scheduleServiceImpl) ShowTodaySchedule() {
 			fmt.Printf("%s\n", schedule.GetDayName())
 		}
 
-		service.print(schedule)
+		service.print(schedule, false)
 	}
 }
 
-func (service *scheduleServiceImpl) print(schedule entity.Schedule) {
+func (service *scheduleServiceImpl) print(schedule entity.Schedule, showId bool) {
 	format := "[%s - %s] %s %s (%s)\n"
 	args := []interface{}{schedule.StartTime, schedule.EndTime, schedule.Code, schedule.Name, schedule.LecturerName}
+
+	if showId {
+		format = "%d. " + format
+		args = append([]interface{}{schedule.Id}, args...)
+	}
 
 	if time.Now().Weekday() == time.Weekday(schedule.Day) {
 		color.Yellow(format, args...)
