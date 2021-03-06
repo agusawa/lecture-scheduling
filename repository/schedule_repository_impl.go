@@ -8,20 +8,20 @@ import (
 	"time"
 )
 
-func NewScheduleRepository(database *sql.DB) ScheduleRepository {
+func NewScheduleRepository(connection *sql.DB) ScheduleRepository {
 	return &scheduleRepositoryImpl{
-		database: database,
+		connection: connection,
 	}
 }
 
 type scheduleRepositoryImpl struct {
-	database *sql.DB
+	connection *sql.DB
 }
 
 func (repository *scheduleRepositoryImpl) Add(schedule *entity.Schedule) {
 	query := "INSERT INTO schedules (code, name, start_time, end_time, lecturer_name, day) VALUES (?, ?, ?, ?, ?, ?)"
 
-	statement, err := repository.database.Prepare(query)
+	statement, err := repository.connection.Prepare(query)
 	exception.PanicIfNeeded(err)
 	defer statement.Close()
 
@@ -38,7 +38,7 @@ func (repository *scheduleRepositoryImpl) Add(schedule *entity.Schedule) {
 func (repository *scheduleRepositoryImpl) FindAll() (schedules []entity.Schedule) {
 	query := "SELECT id, code, name, start_time, end_time, lecturer_name, day FROM schedules ORDER BY day, start_time"
 
-	rows, err := repository.database.Query(query)
+	rows, err := repository.connection.Query(query)
 	exception.PanicIfNeeded(err)
 	defer rows.Close()
 	repository.serializeRows(rows, &schedules)
@@ -50,7 +50,7 @@ func (repository *scheduleRepositoryImpl) Today() (schedules []entity.Schedule) 
 	today := time.Now().Weekday()
 	query := "SELECT id, code, name, start_time, end_time, lecturer_name, day FROM schedules WHERE day = ? ORDER BY start_time"
 
-	statement, err := repository.database.Prepare(query)
+	statement, err := repository.connection.Prepare(query)
 	exception.PanicIfNeeded(err)
 
 	rows, err := statement.Query(today)

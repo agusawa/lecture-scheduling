@@ -15,11 +15,11 @@ func main() {
 
 	// Setup configuration
 	configuration := config.New("./.env")
-	database := config.NewSqliteDatabase(configuration)
-	defer database.Close()
+	connection := config.NewSqliteDatabase(configuration)
+	defer connection.Close()
 
 	// Setup repository
-	scheduleRepository := repository.NewScheduleRepository(database)
+	scheduleRepository := repository.NewScheduleRepository(connection)
 
 	// Setup service
 	scheduleService := service.NewScheduleService(&scheduleRepository)
