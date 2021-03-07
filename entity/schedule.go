@@ -1,7 +1,8 @@
 package entity
 
 import (
-	"lecture-scheduling/lib"
+	"lecture-scheduling/exception"
+	"lecture-scheduling/lib/day"
 )
 
 type Schedule struct {
@@ -14,6 +15,9 @@ type Schedule struct {
 	Day          int8
 }
 
-func (entity *Schedule) GetDayName() string {
-	return lib.GetDay(entity.Day).Name
+func (entity *Schedule) GetDay() day.Day {
+	dayObject, err := day.DayOf(entity.Day)
+	exception.PanicIfNeeded(err)
+
+	return dayObject
 }

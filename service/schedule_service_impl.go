@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"lecture-scheduling/entity"
-	"lecture-scheduling/lib"
+	"lecture-scheduling/lib/day"
 	"lecture-scheduling/repository"
 	"time"
 
@@ -39,8 +39,8 @@ func (service *scheduleServiceImpl) Add() error {
 	fmt.Print("\nLecturer name: ")
 	fmt.Scan(&schedule.LecturerName)
 
-	for _, day := range lib.Days {
-		fmt.Printf("%d. %s\n", day.GetId(), day.GetName())
+	for _, day := range day.GetDays() {
+		fmt.Printf("%d. %s\n", day.Id, day.Name)
 	}
 
 	fmt.Print("Select day by number: ")
@@ -66,7 +66,7 @@ func (service *scheduleServiceImpl) ShowAllSchedulesWithId() {
 	lastDay := ""
 
 	for index, schedule := range schedules {
-		dayName := schedule.GetDayName()
+		dayName := schedule.GetDay().Name
 
 		if lastDay != dayName {
 			lastDay = dayName
@@ -93,7 +93,7 @@ func (service *scheduleServiceImpl) ShowAllSchedules() {
 	lastDay := ""
 
 	for index, schedule := range schedules {
-		dayName := schedule.GetDayName()
+		dayName := schedule.GetDay().Name
 
 		if lastDay != dayName {
 			lastDay = dayName
@@ -118,7 +118,7 @@ func (service *scheduleServiceImpl) ShowTodaySchedule() {
 
 	for index, schedule := range schedules {
 		if index == 0 {
-			fmt.Printf("%s\n", schedule.GetDayName())
+			fmt.Printf("%s\n", schedule.GetDay().Name)
 		}
 
 		service.print(schedule, false)
