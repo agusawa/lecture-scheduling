@@ -70,6 +70,7 @@ func (app *applicationImpl) showMenu() {
 
 		app.clearScreen()
 		app.showMenu()
+
 	case "2":
 		if err := app.ScheduleService.Add(); err != nil {
 			app.clearScreen()
@@ -84,8 +85,9 @@ func (app *applicationImpl) showMenu() {
 	// 	//
 	// case "9":
 	// 	//
-	// case "0":
-	// 	//
+	case "0":
+		fmt.Println("\nGood bye. Have a great day!")
+
 	default:
 		app.clearScreen()
 		color.Red("Invalid choice!\n\n")
