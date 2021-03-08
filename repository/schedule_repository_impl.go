@@ -62,6 +62,31 @@ func (repository *scheduleRepositoryImpl) Today() (schedules []entity.Schedule) 
 	return schedules
 }
 
+func (repository *scheduleRepositoryImpl) FindById(id int) (schedule entity.Schedule, err error) {
+	query := "SELECT id, code, name, start_time, end_time, lecturer_name, day FROM schedules WHERE id = ? LIMIT 1"
+
+	statement, err := repository.connection.Prepare(query)
+	exception.PanicIfNeeded(err)
+	defer statement.Close()
+
+	row := statement.QueryRow(id)
+	err = repository.serializeRow(row, &schedule)
+
+	return schedule, err
+}
+
+func (repository *scheduleRepositoryImpl) Delete(id int) {
+	query := "DELETE FROM schedules WHERE id = ?"
+
+	statement, err := repository.connection.Prepare(query)
+	exception.PanicIfNeeded(err)
+
+	_, err = statement.Exec(id)
+	exception.PanicIfNeeded(err)
+
+	statement.Close()
+}
+
 func (repository *scheduleRepositoryImpl) DeleteAll() {
 	//
 }
@@ -75,4 +100,14 @@ func (repository *scheduleRepositoryImpl) serializeRows(rows *sql.Rows, schedule
 
 		*schedules = append(*schedules, schedule)
 	}
+}
+
+func (repository *scheduleRepositoryImpl) serializeRow(row *sql.Row, schedule *entity.Schedule) error {
+	err := row.Scan(&schedule.Id, &schedule.Code, &schedule.Name, &schedule.StartTime, &schedule.EndTime, &schedule.LecturerName, &schedule.Day)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

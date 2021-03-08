@@ -7,7 +7,11 @@ type ScheduleRepository interface {
 
 	Today() (schedule []entity.Schedule)
 
+	FindById(id int) (schedule entity.Schedule, err error)
+
 	FindAll() (schedules []entity.Schedule)
+
+	Delete(id int)
 
 	DeleteAll()
 }

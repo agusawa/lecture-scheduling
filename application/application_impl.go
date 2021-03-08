@@ -81,8 +81,25 @@ func (app *applicationImpl) showMenu() {
 		}
 	// case "3":
 	// 	//
-	// case "4":
-	// 	//
+
+	case "4":
+		app.clearScreen()
+		fmt.Print("Enter the id of the schedule you want to delete: ")
+		fmt.Scanln(&input)
+
+		app.clearScreen()
+		if value, err := strconv.Atoi(input); err != nil {
+			color.Red("Invalid schedule id.")
+		} else {
+			if err := app.ScheduleService.Delete(value); err != nil {
+				color.Red(err.Error())
+			} else {
+				color.Green("Schedule successfully deleted.")
+			}
+		}
+		fmt.Println("")
+		app.showMenu()
+
 	// case "9":
 	// 	//
 	case "0":

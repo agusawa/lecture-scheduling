@@ -1,9 +1,11 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"lecture-scheduling/entity"
+	"lecture-scheduling/exception"
 	"lecture-scheduling/lib/day"
 	"lecture-scheduling/repository"
 	"time"
@@ -52,6 +54,18 @@ func (service *scheduleServiceImpl) Add() error {
 
 	service.ScheduleRepository.Add(&schedule)
 
+	return nil
+}
+
+func (service *scheduleServiceImpl) Delete(id int) error {
+	if _, err := service.ScheduleRepository.FindById(id); err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("Invalid schedule id.")
+		}
+		exception.PanicIfNeeded(err)
+	}
+
+	service.ScheduleRepository.Delete(id)
 	return nil
 }
 
