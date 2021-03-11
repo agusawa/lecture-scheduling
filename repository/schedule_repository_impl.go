@@ -126,9 +126,9 @@ func (repository *scheduleRepositoryImpl) serializeRows(rows *sql.Rows, schedule
 func (repository *scheduleRepositoryImpl) serializeRow(row *sql.Row, schedule *entity.Schedule) error {
 	err := row.Scan(&schedule.Id, &schedule.Code, &schedule.Name, &schedule.StartTime, &schedule.EndTime, &schedule.LecturerName, &schedule.Day)
 
-	if err != nil {
-		return err
+	if err == sql.ErrNoRows {
+		return nil
 	}
 
-	return nil
+	return err
 }
