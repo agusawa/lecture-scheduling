@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"lecture-scheduling/entity"
 	"lecture-scheduling/exception"
@@ -73,6 +74,26 @@ func (repository *scheduleRepositoryImpl) FindById(id int) (schedule entity.Sche
 	err = repository.serializeRow(row, &schedule)
 
 	return schedule, err
+}
+
+func (repository *scheduleRepositoryImpl) Edit(schedule entity.Schedule) error {
+	query := "UPDATE schedules SET code = ?, name = ?, start_time = ?, end_time = ?, lecturer_name = ?, day = ? WHERE id = ?"
+
+	statement, err := repository.connection.Prepare(query)
+	exception.PanicIfNeeded(err)
+	defer statement.Close()
+
+	result, err := statement.Exec(schedule.Code, schedule.Name, schedule.StartTime, schedule.EndTime, schedule.LecturerName, schedule.Day, schedule.Id)
+	exception.PanicIfNeeded(err)
+
+	affectedRows, err := result.RowsAffected()
+	exception.PanicIfNeeded(err)
+
+	if affectedRows == 0 {
+		return errors.New("No row affected.")
+	}
+
+	return nil
 }
 
 func (repository *scheduleRepositoryImpl) Delete(id int) {

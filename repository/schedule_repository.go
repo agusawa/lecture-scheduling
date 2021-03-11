@@ -11,6 +11,8 @@ type ScheduleRepository interface {
 
 	FindAll() (schedules []entity.Schedule)
 
+	Edit(schedule entity.Schedule) error
+
 	Delete(id int)
 
 	DeleteAll()
