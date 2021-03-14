@@ -79,6 +79,9 @@ func (app *applicationImpl) showMenu() {
 			app.clearScreen()
 			color.Green("Schedule saved successfully.")
 		}
+		fmt.Println("")
+		app.showMenu()
+
 	// case "3":
 	// 	//
 
