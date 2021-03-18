@@ -57,6 +57,42 @@ func (service *scheduleServiceImpl) Add() error {
 	return nil
 }
 
+func (service *scheduleServiceImpl) Edit(id int) error {
+	schedule, err := service.ScheduleRepository.FindById(id)
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Print("Class code: ")
+	fmt.Scan(&schedule.Code)
+
+	fmt.Print("\nClass name: ")
+	fmt.Scan(&schedule.Name)
+
+	fmt.Print("\nStart time: ")
+	fmt.Scan(&schedule.StartTime)
+
+	fmt.Print("\nEnd time: ")
+	fmt.Scan(&schedule.EndTime)
+
+	fmt.Print("\nLecturer name: ")
+	fmt.Scan(&schedule.LecturerName)
+
+	for _, day := range day.GetDays() {
+		fmt.Printf("%d. %s\n", day.Id, day.Name)
+	}
+
+	fmt.Print("Select day by number: ")
+	fmt.Scan(&schedule.Day)
+
+	if schedule.Day < 0 || schedule.Day > 6 {
+		return errors.New("Invalid day")
+	}
+
+	return service.ScheduleRepository.Edit(schedule)
+}
+
 func (service *scheduleServiceImpl) Delete(id int) error {
 	if _, err := service.ScheduleRepository.FindById(id); err != nil {
 		if err == sql.ErrNoRows {
