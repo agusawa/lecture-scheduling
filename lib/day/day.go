@@ -31,7 +31,7 @@ func DayOf(id int8) (day Day, err error) {
 		}
 	}
 
-	if day.Id == 0 {
+	if day.Id == 0 && day.Name == "" {
 		return day, errors.New("Invalid day id.")
 	}
 
