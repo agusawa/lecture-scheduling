@@ -49,13 +49,22 @@ func (app *applicationImpl) manage() {
 func (app *applicationImpl) showMenu() {
 	var input string
 
+	menus := []struct {
+		id   int8
+		name string
+	}{
+		{1, "Show schedules"},
+		{2, "Add schedule"},
+		{3, "Edit schedule"},
+		{4, "Delete schedule"},
+		{9, "Reset schedule"},
+		{0, "Exit"},
+	}
+
 	fmt.Println("====== MENU ======")
-	fmt.Println("1. Show schedules")
-	fmt.Println("2. Add schedule")
-	fmt.Println("3. Edit schedule")
-	fmt.Println("4. Delete schedule")
-	fmt.Println("\n9. Reset schedule")
-	fmt.Println("0. Exit")
+	for _, menu := range menus {
+		fmt.Printf("%d %s", menu.id, menu.name)
+	}
 	fmt.Println("==================")
 	fmt.Print("Select your choice: ")
 	fmt.Scan(&input)
