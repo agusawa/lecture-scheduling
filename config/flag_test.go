@@ -17,13 +17,13 @@ func TestInitFlags(t *testing.T) {
 		{"MANAGE", false},
 	}
 
-	t.Run("Before InitFlags()", func(t *testing.T) {
+	t.Run("Get flag values before call InitFlags()", func(t *testing.T) {
 		for _, envTest := range envsTest {
 			assert.Empty(t, os.Getenv(envTest.name))
 		}
 	})
 
-	t.Run("After InitFlags()", func(t *testing.T) {
+	t.Run("Get flag values after call InitFlags()", func(t *testing.T) {
 		InitFlags()
 
 		for _, envTest := range envsTest {
