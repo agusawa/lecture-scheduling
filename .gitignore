@@ -2,3 +2,5 @@
 
 *.sql
 lecture-scheduling
+
+*.out
