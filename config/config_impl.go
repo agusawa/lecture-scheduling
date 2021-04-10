@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"lecture-scheduling/exception"
 	"os"
 
@@ -31,5 +32,6 @@ func (config *configImpl) Get(key string) string {
 }
 
 func (config *configImpl) DeleteDatabase() {
-	os.Remove(config.Get("SQL_FILENAME"))
+	path := fmt.Sprintf("../%s", config.Get("SQL_FILENAME"))
+	os.Remove(path)
 }

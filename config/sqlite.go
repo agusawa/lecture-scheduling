@@ -2,18 +2,19 @@ package config
 
 import (
 	"database/sql"
+	"fmt"
 	"lecture-scheduling/exception"
 	"os"
 )
 
 func NewSqliteDatabase(config Config) *sql.DB {
-	filename := config.Get("SQL_FILENAME")
+	pathname := fmt.Sprintf("../%s", config.Get("SQL_FILENAME"))
 
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		createNewDatabaseFile(filename)
+	if _, err := os.Stat(pathname); os.IsNotExist(err) {
+		createNewDatabaseFile(pathname)
 	}
 
-	connection, err := sql.Open("sqlite3", filename)
+	connection, err := sql.Open("sqlite3", pathname)
 	exception.PanicIfNeeded(err)
 
 	createTable(connection)
@@ -21,8 +22,8 @@ func NewSqliteDatabase(config Config) *sql.DB {
 	return connection
 }
 
-func createNewDatabaseFile(filename string) {
-	file, err := os.Create(filename)
+func createNewDatabaseFile(pathname string) {
+	file, err := os.Create(pathname)
 	exception.PanicIfNeeded(err)
 	file.Close()
 }
