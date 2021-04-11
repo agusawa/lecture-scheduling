@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -64,11 +65,13 @@ func TestConfig_DeleteDatabase(t *testing.T) {
 	filename := config.Get("SQL_FILENAME")
 
 	t.Run("Delete sql database", func(t *testing.T) {
-		file, _ := os.Create(filename)
+		pathname := fmt.Sprintf("../%s", filename)
+
+		file, _ := os.Create(pathname)
 		file.Close()
-		assert.FileExists(t, filename)
+		assert.FileExists(t, pathname)
 
 		config.DeleteDatabase()
-		assert.NoFileExists(t, filename)
+		assert.NoFileExists(t, pathname)
 	})
 }
