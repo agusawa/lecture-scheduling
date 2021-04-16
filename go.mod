@@ -3,6 +3,7 @@ module lecture-scheduling
 go 1.13
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/fatih/color v1.10.0
 	github.com/inancgumus/screen v0.0.0-20190314163918-06e984b86ed3
 	github.com/joho/godotenv v1.3.0
